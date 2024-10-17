@@ -1,0 +1,115 @@
+---
+title: "Counts"
+author: "Prathishta"
+date: 07-10-2024
+description: ""
+---
+
+## Introduction
+
+I will be exploring dataset on banned books by counting categories like the number of bans, type of bans,etc.
+
+## Count Banned Book by state
+
+```{r}
+banned_books
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+
+# Count number of bans per state
+bans_by_state <- banned_books %>%
+  group_by(State) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Display the count
+print(bans_by_state)
+```
+
+## Count of Banned books by Author
+
+The number of books challenged or removed by each author, this gives information of authors that are facing censorship.
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+
+# Check the data structure
+print(head(banned_books))
+print(str(banned_books))
+
+# Count number of books by Author
+author_count <- banned_books %>%
+  group_by(Author) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  arrange(desc(count))
+
+# Plotting the count of banned books by Author
+ggplot(author_count %>% top_n(10), aes(x = reorder(Author, count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Top 10 Banned Books by Author", x = "Author", y = "Count") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 10))
+
+```
+
+## Count by type of ban
+
+The Type of ban column categorizes books based on how they were banned ,Let's count the occurrences of each type of ban.
+
+```{r}
+# Count number of books by Type of Ban
+type_count <- banned_books %>%
+  group_by(`Type of Ban`) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Display the counts
+print(type_count)
+
+# Plotting the count of books by Type of Ban
+ggplot(type_count, aes(x = reorder(`Type of Ban`, count), y = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Number of Banned Books by Type of Ban", x = "Type of Ban", y = "Count") +
+  theme_minimal()
+
+
+
+```
+
+## Count by Origin of Challenge
+
+I am going to count how many books were challenged and how.
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Count by 'Origin of Challenge'
+origin_of_challenge_count <- banned_books %>%
+  group_by(`Origin of Challenge`) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Create a pie chart
+ggplot(origin_of_challenge_count, aes(x = "", y = count, fill = `Origin of Challenge`)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  labs(title = "Distribution of Banned Books by Origin of Challenge", 
+       fill = "Origin of Challenge") +
+  theme_void() + 
+  theme(legend.position = "right") 
+# Adjust position
+
+
+
+
+
+```

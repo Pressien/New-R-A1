@@ -1,0 +1,115 @@
+---
+title: "Code Replication"
+author:  "Prathishta"
+date: 07-10-2024
+description: "This is the replication code for the new dataset I am trying to work with"
+---
+
+## Introduction
+
+For Assignment 1 (A1), I am working with a dataset titled "Books Banned in the USA." In this analysis, I will initiate the necessary packages, explore the dataset, clean it up, and then provide summary statistics to gain insights.
+
+## Initiating packages
+
+```{r}
+#| label: setup
+library (tidyverse)
+library (ggformula)
+library (mosaic)
+library (kableExtra)
+
+```
+
+I have initiated the packages that may be necessary for this analysis.
+
+## Looking into the data set "Books Banned in the USA"
+
+```{r}
+banned_books
+
+
+
+```
+
+## Summary Overviews
+
+```{r}
+ glimpse(banned_books)
+ inspect(ba
+```
+
+```{r}
+skimr::skim ("banned_books")
+
+```
+
+## Data Inspection
+
+If the initial skim does not give much information, I will further explore the structure of the dataset:
+
+```{r}
+# Checking
+glimpse(banned_books)
+str(banned_books)
+
+# Viewing the first and last few rows
+head(banned_books)
+tail(banned_books)
+
+# Dimensions of the dataset
+dim(banned_books)
+
+# Summary statistics of the dataset
+summary(banned_books)
+
+```
+
+## Data Cleaning
+
+To enhance the dataset for analysis, I will clean it by trimming whitespace from character columns and converting character columns to numeric where applicable:
+
+```{r}
+banned_books <- banned_books %>%
+  mutate(across(where(is.character), trimws),  
+         # Trimming whitespace from character columns
+         across(where(is.numeric), as.numeric)) 
+# Converting chr columns to num
+
+```
+
+## Re-assessing Data
+
+After cleaning the dataset, I will re-run the skim function to check if the cleaning process has improved the data.
+
+```{r}
+skimr::skim(banned_books)
+
+```
+
+## Summarizing the Banned Books Dataset
+
+```{r}
+# Group by "State" and "Type of Ban" and summarize the dataset
+banned_books_summary <- banned_books %>%
+  group_by(State, `Type of Ban`) %>%
+  summarize(
+    count = n(),                    
+    # Count number of entries per group
+    unique_authors = n_distinct(Author) 
+    # Count unique authors
+  )
+
+# Print the summary
+print(banned_books_summary)
+
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+
+# Load the dataset
+banned_books <- read.csv("C:/Users/prath/Documents/My R/my blog/A1/data/banned.csv.csv")
+
+
+```
